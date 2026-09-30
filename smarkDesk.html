@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartDesk — Student Productivity Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="navbar">
+        <div class="logo">
+            <i class="fa-solid fa-laptop-code"></i> SmartDesk 💡
+        </div>
+        
+        <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="globalSearch" placeholder="Search tasks or notes...">
+        </div>
+
+        <nav class="nav-links" id="navLinks">
+            <a href="#dashboard" class="active"><i class="fa-solid fa-chart-pie"></i> Home</a>
+            <a href="#tasks"><i class="fa-solid fa-list-check"></i> Tasks</a>
+            <a href="#schedule"><i class="fa-solid fa-calendar-days"></i> Schedule</a>
+            <a href="#notes"><i class="fa-solid fa-note-sticky"></i> Notes</a>
+            <a href="#about"><i class="fa-solid fa-user"></i> About & Settings</a>
+        </nav>
+
+        <div class="nav-actions">
+            <button id="themeToggle" class="icon-btn" title="Toggle Theme">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+            <button class="hamburger" id="hamburgerMenu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Workspace Container -->
+    <main class="main-container">
+
+        <!-- DASHBOARD SECTION -->
+        <section id="dashboard" class="tab-content active">
+            <div class="welcome-hero">
+                <h2>Welcome Back, <span id="userDisplayName">Jisan</span> 👋</h2>
+                <p>Your personal workspace for a smarter, more organized day.</p>
+            </div>
+
+            <!-- Dashboard Overview Cards -->
+            <div class="stats-grid">
+                <div class="card stat-card">
+                    <div class="stat-icon blue"><i class="fa-solid fa-list-check"></i></div>
+                    <div>
+                        <h3 id="statTotal">0</h3>
+                        <p>Total Tasks</p>
+                    </div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-icon green"><i class="fa-solid fa-circle-check"></i></div>
+                    <div>
+                        <h3 id="statCompleted">0</h3>
+                        <p>Completed</p>
+                    </div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-icon orange"><i class="fa-solid fa-clock"></i></div>
+                    <div>
+                        <h3 id="statUpcoming">0</h3>
+                        <p>Upcoming</p>
+                    </div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-icon purple"><i class="fa-solid fa-bolt"></i></div>
+                    <div>
+                        <h3 id="statProductivity">0%</h3>
+                        <p>Productivity Score</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weather API Widget & Quick Tasks Grid -->
+            <div class="dashboard-grid">
+                <div class="card weather-card">
+                    <h3><i class="fa-solid fa-cloud-sun"></i> Live Weather</h3>
+                    <div id="weatherContent" class="weather-content">
+                        <p>Fetching local weather...</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><i class="fa-solid fa-calendar-day"></i> Today's Focus Tasks</h3>
+                    <ul id="dashboardTaskList" class="task-list"></ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- TASKS SECTION -->
+        <section id="tasks" class="tab-content">
+            <div class="section-header">
+                <h2>Task Manager</h2>
+                <button class="btn btn-primary" id="openTaskModalBtn">
+                    <i class="fa-solid fa-plus"></i> Add New Task
+                </button>
+            </div>
+
+            <div class="filter-controls card">
+                <select id="priorityFilter">
+                    <option value="ALL">All Priorities</option>
+                    <option value="High">High Priority</option>
+                    <option value="Medium">Medium Priority</option>
+                    <option value="Low">Low Priority</option>
+                </select>
+                <select id="statusFilter">
+                    <option value="ALL">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+
+            <div class="card">
+                <ul id="mainTaskList" class="task-list"></ul>
+            </div>
+        </section>
+
+        <!-- SCHEDULE SECTION -->
+        <section id="schedule" class="tab-content">
+            <div class="section-header">
+                <h2>My Class & Activity Schedule</h2>
+                <button class="btn btn-primary" id="openScheduleModalBtn">
+                    <i class="fa-solid fa-plus"></i> Add Slot
+                </button>
+            </div>
+            <div class="card table-responsive">
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Activity / Course</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scheduleBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- NOTES SECTION -->
+        <section id="notes" class="tab-content">
+            <div class="section-header">
+                <h2>Smart Notes</h2>
+                <button class="btn btn-primary" id="openNoteModalBtn">
+                    <i class="fa-solid fa-plus"></i> New Note
+                </button>
+            </div>
+            <div id="notesGrid" class="notes-grid"></div>
+        </section>
+
+        <!-- RICH PROFILE & DEVELOPER CREDIT SECTION -->
+        <section id="about" class="tab-content">
+            <div class="about-grid">
+                <!-- User Profile Summary -->
+                <div class="card profile-card">
+                    <div class="avatar"><i class="fa-solid fa-user-graduate"></i></div>
+                    <h3 id="profileName">fizul</h3>
+                    <p class="badge">CIS Student</p>
+                    <hr class="divider">
+                    <div class="profile-stats">
+                        <div><strong id="profCompleted">0</strong><span>Tasks Done</span></div>
+                        <div><strong id="profNotesCount">0</strong><span>Notes</span></div>
+                        <div><strong id="profProductivity">0%</strong><span>Score</span></div>
+                    </div>
+                    <hr class="divider">
+                    <div class="bio-box">
+                        <h4><i class="fa-solid fa-address-card"></i> About Student</h4>
+                        <p>Currently pursuing a Bachelor's in Computing & Information Systems. Passionate about software architecture, web development, and digital productivity systems.</p>
+                    </div>
+                </div>
+
+                <!-- Expanded Developer, Project Info & Settings -->
+                <div class="about-right-column">
+                    <!-- Project Overview Card -->
+                    <div class="card credit-card">
+                        <h3><i class="fa-solid fa-circle-info"></i> Project Information</h3>
+                        <p><strong>SmartDesk</strong> is a centralized web portal built as a semester final project. It integrates real-time state management, theme switching, and external APIs to help students track tasks, schedules, and notes effortlessly.</p>
+                        
+                        <div class="tech-stack-badges">
+                            <span class="tech-tag"><i class="fa-brands fa-html5"></i> HTML5</span>
+                            <span class="tech-tag"><i class="fa-brands fa-css3-alt"></i> CSS3 Grid/Flex</span>
+                            <span class="tech-tag"><i class="fa-brands fa-js"></i> JavaScript ES6</span>
+                            <span class="tech-tag"><i class="fa-solid fa-cloud"></i> Open-Meteo API</span>
+                            <span class="tech-tag"><i class="fa-solid fa-database"></i> LocalStorage API</span>
+                        </div>
+                    </div>
+
+                    <!-- Developer Contact Card -->
+                    <div class="card credit-card">
+                        <h3><i class="fa-solid fa-code"></i> Developer Info & Credits</h3>
+                        <p>Designed and Built by <strong>Jisan</strong>.</p>
+                        <div class="credit-details">
+                            <p><i class="fa-solid fa-university"></i> <strong>Department:</strong> Computing & Information Systems (CIS)</p>
+                            <p><i class="fa-solid fa-envelope"></i> <strong>Contact Email:</strong> fk01727247871@gmail.com</p>
+                            <p><i class="fa-brands fa-github"></i> <strong>GitHub Profile:</strong> <a href="#" style="color:var(--accent);">github.com/jisan-dev</a></p>
+                            <p><i class="fa-solid fa-calendar"></i> <strong>Submission Date:</strong> August 17, 2026</p>
+                        </div>
+                    </div>
+
+                    <!-- System Controls Card -->
+                    <div class="card credit-card">
+                        <h3><i class="fa-solid fa-gears"></i> Workspace Settings</h3>
+                        <p>Manage application preferences and data state directly from this dashboard panel.</p>
+                        <div class="settings-actions">
+                            <button id="clearDataBtn" class="btn btn-danger">
+                                <i class="fa-solid fa-trash"></i> Reset All Saved Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- TASK MODAL -->
+    <div class="modal" id="taskModal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeTaskModal">&times;</span>
+            <h3 id="taskModalTitle">Add New Task</h3>
+            <form id="taskForm">
+                <input type="hidden" id="taskId">
+                <div class="form-group">
+                    <label for="taskName">Task Name *</label>
+                    <input type="text" id="taskName" required>
+                </div>
+                <div class="form-group">
+                    <label for="taskDesc">Description</label>
+                    <textarea id="taskDesc" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="taskPriority">Priority</label>
+                    <select id="taskPriority">
+                        <option value="High">High</option>
+                        <option value="Medium" selected>Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="taskDeadline">Deadline *</label>
+                    <input type="date" id="taskDeadline" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Task</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- NOTE MODAL -->
+    <div class="modal" id="noteModal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeNoteModal">&times;</span>
+            <h3 id="noteModalTitle">Add New Note</h3>
+            <form id="noteForm">
+                <input type="hidden" id="noteId">
+                <div class="form-group">
+                    <label for="noteTitle">Title *</label>
+                    <input type="text" id="noteTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="noteCategory">Category</label>
+                    <input type="text" id="noteCategory" placeholder="e.g., DSA, Web Dev" required>
+                </div>
+                <div class="form-group">
+                    <label for="noteContent">Content *</label>
+                    <textarea id="noteContent" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Note</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- SCHEDULE MODAL -->
+    <div class="modal" id="scheduleModal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeScheduleModal">&times;</span>
+            <h3>Add Schedule Slot</h3>
+            <form id="scheduleForm">
+                <div class="form-group">
+                    <label for="schedTime">Time Slot *</label>
+                    <input type="text" id="schedTime" placeholder="e.g., 9:00 AM" required>
+                </div>
+                <div class="form-group">
+                    <label for="schedActivity">Activity / Subject *</label>
+                    <input type="text" id="schedActivity" placeholder="e.g., CIS Class" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Add to Schedule</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
